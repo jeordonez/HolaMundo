@@ -19,7 +19,7 @@ int main(int argc, char *argv[])
  
   if(myid == 0)
   {
-    printf("Tenemos %d procesadores\n", numprocs);
+    printf("\nTenemos %d procesadores\n", numprocs);
     for(i=1;i<numprocs;i++)
     {
       sprintf(buff, "¡Holaaa %d! ", i);
@@ -35,7 +35,7 @@ int main(int argc, char *argv[])
   {
     MPI_Recv(buff, 128, MPI_CHAR, 0, 0, MPI_COMM_WORLD, &stat);
     gethostname(hostname,128);
-    sprintf(idstr, "Procesador %d en %s ", myid, hostname);
+    sprintf(idstr, "\nProcesador %d en %s  ", myid, hostname);
     strcat(buff, idstr);
     strcat(buff, "reportandose\n");
     MPI_Send(buff, 128, MPI_CHAR, 0, 0, MPI_COMM_WORLD);
