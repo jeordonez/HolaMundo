@@ -5,9 +5,8 @@
  
 int main(int argc, char *argv[])
 {
-  char idstr[32];
-  char buff[128];
-  char hostname[128];
+  char mensajem[20];
+  char mensajes[20];
   int numprocs;
   int myid;
   MPI_Status stat; 
@@ -18,27 +17,27 @@ int main(int argc, char *argv[])
  
   if(myid == 0)
   {
-    printf("\nTenemos %d procesadores\n", numprocs);
+
+    printf("\nTenemos %d procesadores, soy el proceso %d\n", numprocs,myid);
+
     for(int i=1;i<numprocs;i++)
     {
-      sprintf(buff, "Hola proceso %d! ", i);
-      MPI_Send(buff, 128, MPI_CHAR, i, 0, MPI_COMM_WORLD);
+      sprintf(mensajem, "mensaje del maestro");
+      MPI_Send(mensajem, 20, MPI_CHAR, i, 0, MPI_COMM_WORLD);
     }
-	sleep(1);
+    sleep(1);
     for(int j=1;j<numprocs;j++)
     {
-      MPI_Recv(buff, 128, MPI_CHAR, j, 0, MPI_COMM_WORLD, &stat);
-      printf("%s\n", buff);
+      MPI_Recv(mensajes, 20, MPI_CHAR, j, 0, MPI_COMM_WORLD, &stat);
+      printf("\n %s \n", mensajes);
     }
   }
   else
   {
-    MPI_Recv(buff, 128, MPI_CHAR, 0, 0, MPI_COMM_WORLD, &stat);
-    gethostname(hostname,128);
-    sprintf(idstr, "\nProcesador %d en %s  ", myid, hostname);
-    strcat(buff, idstr);
-    strcat(buff, "reportandose\n");
-    MPI_Send(buff, 128, MPI_CHAR, 0, 0, MPI_COMM_WORLD);
+    MPI_Recv(mensajem, 20, MPI_CHAR, 0, 0, MPI_COMM_WORLD, &stat);
+    printf("\n %s \n", mensajem);
+     sprintf(mensajes, "proceso esclavo %d",myid);
+    MPI_Send(mensajes, 20, MPI_CHAR, 0, 0, MPI_COMM_WORLD);
   }
  
   MPI_Finalize();
