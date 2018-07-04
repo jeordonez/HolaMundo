@@ -10,7 +10,6 @@ int main(int argc, char *argv[])
   char hostname[128];
   int numprocs;
   int myid;
-  int i;
   MPI_Status stat; 
  
   MPI_Init(&argc,&argv); 
@@ -20,15 +19,16 @@ int main(int argc, char *argv[])
   if(myid == 0)
   {
     printf("\nTenemos %d procesadores\n", numprocs);
-    for(i=1;i<numprocs;i++)
+    for(int i=1;i<numprocs;i++)
     {
       sprintf(buff, "Hola proceso %d! ", i);
       MPI_Send(buff, 128, MPI_CHAR, i, 0, MPI_COMM_WORLD);
     }
-    for(i=1;i<numprocs;i++)
+	sleep(1);
+    for(int j=1;j<numprocs;j++)
     {
-      MPI_Recv(buff, 128, MPI_CHAR, i, 0, MPI_COMM_WORLD, &stat);
-      printf("\n%s\n", buff);
+      MPI_Recv(buff, 128, MPI_CHAR, j, 0, MPI_COMM_WORLD, &stat);
+      printf("%s\n", buff);
     }
   }
   else
